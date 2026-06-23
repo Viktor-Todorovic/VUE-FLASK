@@ -54,11 +54,11 @@ export default {
 
     methods: {
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/korisnici')
+            const data = await axios.get('http://127.0.0.1:5000/users')
             this.korisnici = data.data
         },
         async dohvati_korisnika() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.ulogovan = data.data
         }, 
 
@@ -102,7 +102,7 @@ export default {
                 }
             }
 
-            await axios.post('http://127.0.0.1:5000/register',this.korisnik)
+            await axios.post('http://127.0.0.1:5000/users',this.korisnik)
 
             this.$router.push('/')
         },

@@ -55,7 +55,7 @@ export default {
 
     methods: {
         async dohvati_proizvode() {
-            const data = await axios.get('http://127.0.0.1:5000/proizvodi')
+            const data = await axios.get('http://127.0.0.1:5000/products')
             this.proizvodi = data.data
         },
         handleFileUpload(event){
@@ -88,7 +88,7 @@ export default {
                 return
             }
 
-            // await axios.post('http://127.0.0.1:5000/dodaj_proizvod',this.proizvod)
+            // await axios.post('http://127.0.0.1:5000/products',this.proizvod)
             // this.$toast.success("Uspesno ste dodali proizvod!")
             // this.$router.push('/')
             const formData = new FormData();
@@ -104,7 +104,7 @@ export default {
             }
 
             try {
-                const response = await axios.post('http://127.0.0.1:5000/dodaj_proizvod', formData, {
+                const response = await axios.post('http://127.0.0.1:5000/products', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }

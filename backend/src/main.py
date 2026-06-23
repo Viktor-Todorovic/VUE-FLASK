@@ -27,13 +27,13 @@ def get_db_connection():
 	database="krojacki_salon"
     )
 
-@app.route('/upload-profilna-slika', methods=['POST'])
-def upload_profilna_slika():
-    if 'profilna_slika' not in request.files or 'id' not in request.form:
+@app.route('/users/<int:user_id>/profile-image', methods=['POST'])
+def upload_profilna_slika(user_id):
+    if 'profilna_slika' not in request.files:
         return jsonify({'error': 'Nema fajla ili ID korisnika nije prosleđen'}), 400
     
     file = request.files['profilna_slika']
-    user_id = request.form.get('id')
+    user_id = request.form.get('id', user_id)
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -57,13 +57,13 @@ def upload_profilna_slika():
     else:
         return jsonify({'error': 'Nedozvoljen format fajla'}), 400
     
-@app.route('/upload-proizvod-slika', methods=['POST'])
-def upload_proizvod_slika():
-    if 'proizvod_slika' not in request.files or 'proizvod_id' not in request.form:
+@app.route('/products/<int:proizvod_id>/image', methods=['POST'])
+def upload_proizvod_slika(proizvod_id):
+    if 'proizvod_slika' not in request.files:
         return jsonify({'error': 'Nema fajla ili ID korisnika nije prosleđen'}), 400
     
     file = request.files['proizvod_slika']
-    slika_id = request.form.get('proizvod_id')
+    slika_id = request.form.get('proizvod_id', proizvod_id)
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
@@ -88,7 +88,7 @@ def upload_proizvod_slika():
         return jsonify({'error': 'Nedozvoljen format fajla'}), 400
 
 
-@app.route('/korisnici')
+@app.route('/users', methods=['GET'])
 def svi_korisnici():
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -96,7 +96,7 @@ def svi_korisnici():
     korisnici = cursor.fetchall()
     return jsonify(korisnici)
 ############################################KOMENTARI#######################################
-@app.route('/komentari')
+@app.route('/comments', methods=['GET'])
 def svi_komentari():
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -104,7 +104,7 @@ def svi_komentari():
     komentari = cursor.fetchall()
     return jsonify(komentari)
 
-@app.route('/dohvatiKomentare/<proizvod_id>')
+@app.route('/products/<proizvod_id>/comments', methods=['GET'])
 def dohvati_komentare(proizvod_id):
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -114,7 +114,7 @@ def dohvati_komentare(proizvod_id):
     print(rez)
     return jsonify(rez)
 
-@app.route('/dohvati_komentare')
+@app.route('/admin/comments', methods=['GET'])
 def dohvati_sve_komentare():
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -132,7 +132,7 @@ def dohvati_sve_komentare():
 #     rez = cursor.fetchall()
 #     return jsonify(rez)
 
-@app.route('/admin/comments/delete/<id>', methods=['DELETE'])
+@app.route('/admin/comments/<id>', methods=['DELETE'])
 def admin_obrisi_komentar(id):
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -142,7 +142,7 @@ def admin_obrisi_komentar(id):
     return jsonify({'message': 'Komentar uspesno obrisan'})
 
 
-@app.route('/proizvod/<proizvod_id>/komentar/obrisi/<komentar_id>', methods=['DELETE'])
+@app.route('/products/<proizvod_id>/comments/<komentar_id>', methods=['DELETE'])
 def obrisi_komentar(proizvod_id, komentar_id):
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -150,7 +150,7 @@ def obrisi_komentar(proizvod_id, komentar_id):
     mydb.commit()
     return jsonify({'message': 'Komentar uspesno obrisan'})
 
-@app.route('/dohvatiSveKomentare')
+@app.route('/comments/details', methods=['GET'])
 def dohvatiSveKomentare():
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -159,13 +159,12 @@ def dohvatiSveKomentare():
     rez = cursor.fetchall()
     return jsonify(rez)
 
-@app.route('/proizvodi/komentari', methods =['POST'])
-def proizvodi_komentari():
+@app.route('/products/<proizvod_id>/comments', methods=['POST'])
+def proizvodi_komentari(proizvod_id):
     data = request.json
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
     print(data)
-    proizvod_id = data['proizvod_id']
     korisnik_id = data['korisnik_id']
     tekst_komentara = data['tekst_komentara']
     
@@ -178,88 +177,7 @@ def proizvodi_komentari():
 
 
 
-
-###############################################KOMENTARI##################################
-###############################################KORPA##################################
-
-
-# @app.route('/cart/add/<int:product_id>', methods=['POST'])
-# def add_to_cart(product_id):
-
-#     if 'korisnik' not in session:
-#         return jsonify({'error': 'Morate biti prijavljeni da biste dodali proizvod u korpu.'}), 401
-
-#     korisnik_id = session['korisnik']['id']
-#     kolicina = request.json.get('kolicina', 1)  
-
-#     try:
-#         mydb = get_db_connection()
-#         cursor = mydb.cursor(prepared=True)
-
-
-#         cursor.execute("SELECT * FROM proizvodi WHERE proizvod_id = %s", (product_id,))
-#         proizvod = cursor.fetchone()
-#         if not proizvod:
-#             return jsonify({'error': 'Proizvod ne postoji.'}), 404
-
-
-#         cursor.execute("SELECT * FROM korpa WHERE proizvod_id = %s AND korisnik_id = %s", ( product_id,korisnik_id))
-#         postojeca_stavka = cursor.fetchone()
-
-#         if postojeca_stavka:
-#             cursor.execute(
-#                 "UPDATE korpa SET kolicina = kolicina + %s WHERE korisnik_id = %s AND proizvod_id = %s",
-#                 (kolicina, korisnik_id, product_id),
-#             )
-#         else:
-#             cursor.execute(
-#                 "INSERT INTO korpa ( proizvod_id, korisnik_id, kolicina) VALUES (%s, %s, %s)",
-#                 (korisnik_id, product_id, kolicina),
-#             )
-
-#         mydb.commit()
-#         return jsonify({'message': 'Proizvod uspešno dodat u korpu.'}), 201
-#     except Exception as e:
-#         return jsonify({'error': str(e)}), 500
-#     finally:
-#         cursor.close()
-#         mydb.close()
-
-# @app.route('/cart/add/<int:product_id>', methods=['POST'])
-# def add_to_cart(proizvod_id):
-#     data = request.json
-#     mydb = get_db_connection()
-#     cursor = mydb.cursor(prepared=True)
-#     kolicina = data.get('kolicina')
-#     korisnik_id = session.get['korisnik']
-#     proizvod_id = data.get('proizvod_id')
-#     cursor.execute("INSERT INTO korisnici (id, username, email, password, godina_rodjenja, trenutno_stanje_novca, vrsta_korisnika) VALUES (?, ?, ?, ?, ?, ?, ?)")
-#     mydb.commit()
-#     return data  
-
-
-
-# @app.route('/cart/add/<int:proizvod_id>', methods=['POST'])
-# def dodaj_u_korpu(proizvod_id):
-#     korisnik_id = session.get('korisnik', {}).get('id')
-#     if not korisnik_id:
-#         return jsonify({'error' : 'Niste prijavljeni!'})
-    
-#     data = request.json
-#     kolicina = data.get('kolicina', 1)
-#     mydb = get_db_connection()
-#     cursor = mydb.cursor(prepared=True)
-#     cursor.execute('SELECT kolicina from korpa where korisnik_id = %s AND proizvod_id = %s',(korisnik_id,proizvod_id))
-#     rez = cursor.fetchone()
-#     if rez:
-#         nova_kolicina = rez[0] + kolicina
-#         cursor.execute('UPDATE korpa SET  kolicina = %s WHERE korisnik_id = %s AND proizvod_id = %s',(nova_kolicina,korisnik_id,proizvod_id))
-#     else:
-#         cursor.execute('INSERT INTO korpa (proizvod_id,korisnik_id,kolicina) VALUES (%s,%s,%s)',(proizvod_id,korisnik_id,kolicina))
-#     mydb.commit()
-#     return jsonify({'message' : 'Proizvod_dodat_u_korpu'})
-
-@app.route('/cart/add/<int:proizvod_id>', methods=['POST'])
+@app.route('/cart/items/<int:proizvod_id>', methods=['POST'])
 def dodaj_u_korpu(proizvod_id):
     korisnik_id = session.get('korisnik', {}).get('id')
     if not korisnik_id:
@@ -276,19 +194,8 @@ def dodaj_u_korpu(proizvod_id):
     return jsonify(data)
 
 
-# @app.route('/korpa', methods = ['GET'])
-# def korpa():
-#     korisnik_id = session.get('korisnik', {}).get('id')
-#     if not korisnik_id:
-#         return jsonify({'error' : 'Niste prijavljeni!'})
-    
-#     mydb = get_db_connection()
-#     cursor = mydb.cursor(dictionary=True)
-#     cursor.execute('SELECT *, korisnik.id, proizvod.proizvod_id from korpa join korisnici on korpa.korisnik_id = korisnici.id join proizvodi on korpa.proizvod_id = proizvod.proizvod_id where korpa.korisnik_id = %s',(korisnik_id, ))
-#     rez = cursor.fetchall()
-#     return jsonify(rez)
 
-@app.route('/korpa', methods=['GET'])
+@app.route('/cart/items', methods=['GET'])
 def korpa():
     korisnik_id = session.get('korisnik', {}).get('id')
     if not korisnik_id:
@@ -298,7 +205,7 @@ def korpa():
         mydb = get_db_connection()
         cursor = mydb.cursor(dictionary=True)
 
-        # SQL upit koji dohvaća proizvode i korisnike
+
         query = """
         SELECT 
             korpa.korpa_id AS korpa_id,
@@ -322,20 +229,8 @@ def korpa():
         cursor.close()
         mydb.close()
 
-# @app.route('/cart/update/<int:proizvod_id>', methods=['POST'])
-# def update_cart(proizvod_id):
-#     korisnik_id = session.get('user', {}).get('id')
-#     if not korisnik_id:
-#         return jsonify({'error': 'Niste prijavljeni'}), 401
-#     data = request.json
-#     nova_kolicina = data.get('kolicina')
-#     mydb = get_db_connection()
-#     cursor = mydb.cursor(prepared=True)
-#     cursor.execute("UPDATE korpa SET kolicina = %s WHERE korisnik_id = %s AND proizvod_id = %s",(nova_kolicina, korisnik_id, proizvod_id))
-#     mydb.commit()
-#     return jsonify({'message': 'Količina ažurirana'})
 
-@app.route('/korpa/obrisi/<proizvod_id>', methods =['DELETE'])
+@app.route('/cart/items/<proizvod_id>', methods=['DELETE'])
 def obrisi_iz_korpe(proizvod_id):
     korisnik_id = session.get('korisnik', {}).get('id')
     if not korisnik_id:
@@ -348,19 +243,19 @@ def obrisi_iz_korpe(proizvod_id):
     return jsonify({'message': 'Proizvod uklonjen iz korpe!'})
 
 
-@app.route('/dodaj_kolicinu_korpe', methods=['POST'])
-def dodaj_kolicinu_korpe():
+@app.route('/cart/items/<int:korpa_id>/quantity', methods=['PATCH'])
+def dodaj_kolicinu_korpe(korpa_id):
     try:
         data = request.json
         mydb = get_db_connection()
         cursor = mydb.cursor(dictionary=True)
         
         
-        if 'kolicina' not in data or 'korpa_id' not in data:
+        if 'kolicina' not in data:
             return jsonify({'error': 'Nedostaju podaci o količini ili ID proizvoda'}), 400
         
         nova_kolicina = int(data['kolicina'])
-        korpa_id = int(data['korpa_id'])
+        korpa_id = int(data.get('korpa_id', korpa_id))
         
         
         cursor.execute('SELECT kolicina FROM korpa WHERE korpa_id = %s', (korpa_id,))
@@ -383,16 +278,19 @@ def dodaj_kolicinu_korpe():
         mydb.close()
 
 
-@app.route('/cart/update/<int:proizvod_id>', methods=['POST'])
+@app.route('/cart/items/<int:proizvod_id>', methods=['PATCH'])
 def update_cart(proizvod_id):
     korisnik_id = session.get('korisnik', {}).get('id')
     if not korisnik_id:
         return jsonify({'error': 'Niste prijavljeni'}), 401
 
     data = request.json
-    nova_kolicina = data.get('kolicina')
+    try:
+        nova_kolicina = int(data.get('kolicina'))
+    except (TypeError, ValueError):
+        return jsonify({'error': 'Neispravna kolicina'}), 400
 
-    if not nova_kolicina or not isinstance(nova_kolicina, int) or nova_kolicina < 1:
+    if nova_kolicina < 1:
         return jsonify({'error': 'Neispravna količina'}), 400
 
     try:
@@ -421,97 +319,7 @@ def update_cart(proizvod_id):
 
 
 
-
-
-
-
-
-# @app.route('/cart/checkout', methods=['POST'])
-# def checkout():
-#     korisnik_id = session.get('korisnik', {}).get('id')
-#     if not korisnik_id:
-#         return jsonify({'error': 'Niste prijavljeni!'}), 401
-
-#     try:
-#         mydb = get_db_connection()
-#         cursor = mydb.cursor(prepared=True)
-
-        
-#         query = """
-#         SELECT 
-#             korpa.proizvod_id AS proizvod_id,
-#             korpa.kolicina AS kolicina,
-#             proizvodi.cena AS cena_po_komadu,
-#             proizvodi.korisnik_id AS krojac_id, 
-#             (korpa.kolicina * proizvodi.cena) AS ukupna_cena
-#         FROM korpa
-#         JOIN proizvodi ON korpa.proizvod_id = proizvodi.proizvod_id
-#         WHERE korpa.korisnik_id = %s
-#         """
-#         cursor.execute(query, (korisnik_id,))
-#         proizvodi_u_korpi = cursor.fetchall()
-
-#         if not proizvodi_u_korpi:
-#             return jsonify({'error': 'Vaša korpa je prazna!'}), 400
-
-#         ukupna_cena = sum([proizvod[4] for proizvod in proizvodi_u_korpi])
-
-        
-#         cursor.execute("SELECT trenutno_stanje_novca FROM korisnici WHERE id = %s", (korisnik_id,))
-#         saldo_rez = cursor.fetchone()
-#         if not saldo_rez or saldo_rez[0] < ukupna_cena:
-#             return jsonify({'error': 'Nemate dovoljno novca za kupovinu!'}), 400
-
-        
-#         cursor.execute(
-#             "UPDATE korisnici SET trenutno_stanje_novca = trenutno_stanje_novca - %s WHERE id = %s",
-#             (ukupna_cena, korisnik_id)
-#         )
-
-        
-#         for proizvod in proizvodi_u_korpi:
-#             proizvod_id = proizvod[0]
-#             kolicina = proizvod[1]
-#             krojac_id = proizvod[3]
-#             ukupna_cena_proizvoda = proizvod[4]
-
-            
-#             cursor.execute(
-#                 """
-#                 INSERT INTO istorija_kupovina (proizvod_id, korisnik_id, kolicina, ukupna_cena)
-#                 VALUES (%s, %s, %s, %s)
-#                 """,
-#                 (proizvod_id, korisnik_id, kolicina, ukupna_cena_proizvoda)
-#             )
-
-            
-#             cursor.execute(
-#                 "UPDATE korisnici SET trenutno_stanje_novca = trenutno_stanje_novca + %s WHERE id = %s",
-#                 (ukupna_cena_proizvoda, krojac_id)
-#             )
-
-            
-#             cursor.execute(
-#                 "UPDATE proizvodi SET kolicina = kolicina - %s WHERE proizvod_id = %s",
-#                 (kolicina, proizvod_id)
-#             )
-
-        
-#         cursor.execute("DELETE FROM korpa WHERE korisnik_id = %s", (korisnik_id,))
-
-#         mydb.commit()
-
-#         return jsonify({'message': f'Kupovina uspešno završena! Ukupno potrošeno: {ukupna_cena} RSD'}), 200
-
-#     except Exception as e:
-#         mydb.rollback()
-#         return jsonify({'error': str(e)}), 500
-
-#     finally:
-#         cursor.close()
-#         mydb.close()
-
-@app.route('/cart/checkout', methods=['POST'])
+@app.route('/orders', methods=['POST'])
 def checkout():
     korisnik_id = session.get('korisnik', {}).get('id')
     if not korisnik_id:
@@ -612,7 +420,7 @@ def checkout():
 
 
 
-@app.route('/dohvati_kupljene_proizvode', methods=['GET'])
+@app.route('/users/me/purchases', methods=['GET'])
 def dohvati_kupljene_proizvode():
     
     korisnik_id = session.get('korisnik', {}).get('id')
@@ -645,7 +453,7 @@ def dohvati_kupljene_proizvode():
 
 
 
-@app.route('/proizvodi')
+@app.route('/products', methods=['GET'])
 def svi_proizvodi():
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -653,7 +461,7 @@ def svi_proizvodi():
     proizvodi = cursor.fetchall()
     return jsonify(proizvodi)
 
-@app.route('/dodaj_proizvod', methods=['POST'])
+@app.route('/products', methods=['POST'])
 def dodaj_proizvod():
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -696,7 +504,7 @@ def dodaj_proizvod():
 
 # "INSERT INTO proizvodi (proizvod_id, korisnik_id,naziv_proizvoda,opis,materijal,mere,cena,kolicina) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
-@app.route('/proizvodi/delete/<id>', methods=['DELETE'])
+@app.route('/products/<id>', methods=['DELETE'])
 def obrisi_proizvod(id):
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -705,7 +513,7 @@ def obrisi_proizvod(id):
     mydb.commit()
     return ""
 
-@app.route('/korisnici/delete/<id>', methods=['DELETE'])
+@app.route('/users/<id>', methods=['DELETE'])
 def obrisi_korisnika(id):
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -714,12 +522,12 @@ def obrisi_korisnika(id):
     mydb.commit()
     return ""
 # -----------------------
-@app.route('/proizvodi/update', methods=['PUT'])
-def update_proizvoda():
+@app.route('/products/<id>', methods=['PUT'])
+def update_proizvoda(id):
    
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
-    id = request.form.get('proizvod_id')
+    id = id or request.form.get('proizvod_id')
     naziv_proizvoda = request.form.get('naziv_proizvoda')
     opis = request.form.get('opis')
     materijal = request.form.get('materijal')
@@ -756,19 +564,19 @@ def update_proizvoda():
     
     return jsonify({'message': 'Profil uspešno ažuriran', 'korisnik': updated_user})
 
-@app.route('/dodaj_kolicinu', methods=['POST'])
-def dodaj_kolicinu():
+@app.route('/products/<int:proizvod_id>/quantity', methods=['PATCH'])
+def dodaj_kolicinu(proizvod_id):
     try:
         data = request.json
         mydb = get_db_connection()
         cursor = mydb.cursor(dictionary=True)
         
         
-        if 'kolicina' not in data or 'proizvod_id' not in data:
+        if 'kolicina' not in data:
             return jsonify({'error': 'Nedostaju podaci o količini ili ID proizvoda'}), 400
         
         nova_kolicina = int(data['kolicina'])
-        proizvod_id = int(data['proizvod_id'])
+        proizvod_id = int(data.get('proizvod_id', proizvod_id))
         
         
         cursor.execute('SELECT kolicina FROM proizvodi WHERE proizvod_id = %s', (proizvod_id,))
@@ -792,7 +600,7 @@ def dodaj_kolicinu():
 
 
 
-@app.route('/dohvati_proizvod_po_idu/<id>')
+@app.route('/products/<id>', methods=['GET'])
 def dohvati_proizvod_po_idu(id):
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -802,7 +610,7 @@ def dohvati_proizvod_po_idu(id):
     
     return jsonify(rez)
 
-@app.route('/dohvati_korisnika_po_idu/<id>')
+@app.route('/users/<id>', methods=['GET'])
 def dohvati_korisnika_po_idu(id):
     mydb = get_db_connection()
     cursor = mydb.cursor(dictionary=True)
@@ -813,7 +621,7 @@ def dohvati_korisnika_po_idu(id):
     return jsonify(rez)
 
 
-@app.route('/register', methods=['POST'])
+@app.route('/users', methods=['POST'])
 def register():
       data = request.json
       mydb = get_db_connection()
@@ -831,13 +639,13 @@ def register():
       mydb.commit()
       return data  
 
-@app.route('/login', methods=['POST'])
+@app.route('/sessions', methods=['POST'])
 def login():
     data = request.json
     session['korisnik'] = data
     return ""
 
-@app.route('/ulogovan_korisnik')
+@app.route('/session', methods=['GET'])
 def ulogovan_korisnik():
     if 'korisnik' in session:
         return jsonify(session['korisnik'])
@@ -847,7 +655,7 @@ def ulogovan_korisnik():
 
 
 
-@app.route('/update_korisnika', methods=['PUT'])
+@app.route('/users/me', methods=['PUT'])
 def update_korisnika():
     mydb = get_db_connection()
     cursor = mydb.cursor(prepared=True)
@@ -887,12 +695,12 @@ def update_korisnika():
 
        
 
-@app.route('/update_korisnika_admin/<id>', methods=['PUT'])
-def update_korisnika_admin():
+@app.route('/admin/users/<id>', methods=['PUT'])
+def update_korisnika_admin(id):
       data = request.json
       mydb = get_db_connection()
       cursor = mydb.cursor(prepared=True)
-      id = data.get('id')
+      id = data.get('id', id)
       username = data.get('username')
       email = data.get('email')
       password = data.get('password')
@@ -905,7 +713,7 @@ def update_korisnika_admin():
       mydb.commit()
       return data 
 
-@app.route('/logout')
+@app.route('/session', methods=['DELETE'])
 def logout():
 
     session.pop("korisnik",None)

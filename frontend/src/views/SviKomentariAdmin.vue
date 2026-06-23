@@ -34,14 +34,14 @@ export default {
 
     methods: {
         async dohvati_komentare() {
-            const data = await axios.get('http://127.0.0.1:5000/dohvati_komentare')
+            const data = await axios.get('http://127.0.0.1:5000/admin/comments')
             this.komentari = data.data
         }, 
 
         
 
         async obrisiKomentar(id){
-            await axios.delete(`http://127.0.0.1:5000/admin/comments/delete/${id}`);
+            await axios.delete(`http://127.0.0.1:5000/admin/comments/${id}`);
             this.$toast.success("Komentar uspesno obrisan");
             this.dohvati_komentare()
             

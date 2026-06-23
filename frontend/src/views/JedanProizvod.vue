@@ -109,26 +109,24 @@ export default {
 
     methods: {
         async dohvati_proizvod() {
-            const data = await axios.get(`http://127.0.0.1:5000/dohvati_proizvod_po_idu/${this.id}`)
+            const data = await axios.get(`http://127.0.0.1:5000/products/${this.id}`)
             this.proizvod = data.data 
         },
 
         async dodaj_kolicinu() {
-            await axios.post('http://127.0.0.1:5000/dodaj_kolicinu',{
-                proizvod_id: this.proizvod.proizvod_id,
+            await axios.patch(`http://127.0.0.1:5000/products/${this.proizvod.proizvod_id}/quantity`,{
                 kolicina: this.nova_kolicina
             })
             this.$toast.success('Uspesno ste dodali kolicinu!')
             location.reload()
         },
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
         }, 
 
         async dodaj_komentar(){
-            await axios.post(`http://127.0.0.1:5000/proizvodi/komentari`, {
-                proizvod_id: this.proizvod.proizvod_id,
+            await axios.post(`http://127.0.0.1:5000/products/${this.proizvod.proizvod_id}/comments`, {
                 korisnik_id: this.korisnik.id,
                 tekst_komentara: this.novi_komentar.tekst_komentara
             })
@@ -141,14 +139,14 @@ export default {
 
         async obrisi_komentar(id){
             
-            await axios.delete(`http://127.0.0.1:5000/proizvod/${this.proizvod.proizvod_id}/komentar/obrisi/${id}`)
+            await axios.delete(`http://127.0.0.1:5000/products/${this.proizvod.proizvod_id}/comments/${id}`)
             this.dohvati_komentare()
             this.$toast.success('Komentar uspesno obrisan')
             
         },
 
         async dohvati_komentare(){
-            const komentari = await axios.get(`http://127.0.0.1:5000/dohvatiKomentare/${this.id}`)
+            const komentari = await axios.get(`http://127.0.0.1:5000/products/${this.id}/comments`)
             this.komentari = komentari.data
         }
     },

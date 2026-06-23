@@ -40,17 +40,17 @@ export default {
 
     methods: {
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
         }, 
 
         async dohvati_proizvod_za_korpu() {
-            const data = await axios.get('http://127.0.0.1:5000/korpa')
+            const data = await axios.get('http://127.0.0.1:5000/cart/items')
             this.korpa = data.data
         }, 
 
         async obrisi_iz_korpe(proizvod_id){
-            await axios.delete(`http://127.0.0.1:5000/korpa/obrisi/${proizvod_id}`)
+            await axios.delete(`http://127.0.0.1:5000/cart/items/${proizvod_id}`)
             this.$toast.success("Uspesno ste obrisali proizvod iz korpe!")
 			location.reload()
             console.log(proizvod_id)
@@ -58,7 +58,7 @@ export default {
 
         async azurirajKolicinu(item) {
             try {
-                await axios.post(`http://127.0.0.1:5000/cart/update/${item.proizvod_id}`, {
+                await axios.patch(`http://127.0.0.1:5000/cart/items/${item.proizvod_id}`, {
                     kolicina: item.kolicina
                 });
                 // this.ukupnaCena += razlikaUKolicini * proizvod.cena;
@@ -79,7 +79,7 @@ export default {
             await this.azurirajKolicinu(item);
         },
         // async zavrsiKupovinu() {
-        //     await axios.post('http://127.0.0.1:5000/cart/checkout')
+        //     await axios.post('http://127.0.0.1:5000/orders')
 
             
             
@@ -89,7 +89,7 @@ export default {
 
         async zavrsiKupovinu() {
     try {
-        await axios.post('http://127.0.0.1:5000/cart/checkout', {}, { withCredentials: true });
+        await axios.post('http://127.0.0.1:5000/orders', {}, { withCredentials: true });
         
         this.$toast.success("Uspešno ste kupili!");
         location.reload();

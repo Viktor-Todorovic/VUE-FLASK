@@ -52,13 +52,13 @@ export default {
     },
     methods: {
       async logout(){
-        await axios.get('http://127.0.0.1:5000/logout')
+        await axios.delete('http://127.0.0.1:5000/session')
         this.$router.push('/login').then(() => {
                     window.location.reload();
                 });
       },
       async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
         },
     },

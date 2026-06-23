@@ -27,7 +27,7 @@ export default {
 
     methods: {
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/korisnici')
+            const data = await axios.get('http://127.0.0.1:5000/users')
             this.korisnici = data.data
         },
 
@@ -56,7 +56,7 @@ export default {
 
             if(this.login()){
                 this.$toast.success("Uspesno ste se ulogovali!")
-                await axios.post('http://127.0.0.1:5000/login',this.korisnik)
+                await axios.post('http://127.0.0.1:5000/sessions',this.korisnik)
                 this.$router.push('/').then(() => {
                     window.location.reload();
                 });

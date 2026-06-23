@@ -39,18 +39,18 @@ export default {
 
     methods: {
 		async dohvati_proizvode() {
-            const data = await axios.get('http://127.0.0.1:5000/proizvodi')
+            const data = await axios.get('http://127.0.0.1:5000/products')
             this.proizvodi = data.data
         },
 
 		async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
 			this.izbaci_ako_nije_admin()
         }, 
 
 		async obrisi_proizvod(id) {
-			await axios.delete(`http://127.0.0.1:5000/proizvodi/delete/${id}`)
+			await axios.delete(`http://127.0.0.1:5000/products/${id}`)
 			location.reload()
 		},
 

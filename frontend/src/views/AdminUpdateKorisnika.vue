@@ -50,11 +50,11 @@ export default {
 
     methods: {
         async dohvati_korisnika() {
-            const data = await axios.get(`http://127.0.0.1:5000/dohvati_korisnika_po_idu/${this.id}`)
+            const data = await axios.get(`http://127.0.0.1:5000/users/${this.id}`)
             this.korisnik = data.data
         },
         async dohvati_korisnika_ulogovanog() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
             this.izbaci_ako_nije_admin()
         }, 
@@ -80,7 +80,7 @@ export default {
                 return
             }
 
-            const data = await axios.put('http://127.0.0.1:5000/update_korisnika',this.korisnik)
+            const data = await axios.put(`http://127.0.0.1:5000/admin/users/${this.id}`,this.korisnik)
             this.korisnik = data.data
             // location.reload()
             this.$toast.success("Uspesno ste izmenili svoj profil!")

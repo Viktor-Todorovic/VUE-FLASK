@@ -64,13 +64,13 @@ export default {
         },
 
         async dohvati_proizvod() {
-            const data = await axios.get(`http://127.0.0.1:5000/dohvati_proizvod_po_idu/${this.id}`)
+            const data = await axios.get(`http://127.0.0.1:5000/products/${this.id}`)
             this.proizvod = data.data 
             this.nije_dozvoljeno()
         },
 
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
         },
 
@@ -111,7 +111,7 @@ export default {
             }
 
             try {
-                const response = await axios.put('http://127.0.0.1:5000/proizvodi/update', formData, {
+                const response = await axios.put(`http://127.0.0.1:5000/products/${this.id}`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     }

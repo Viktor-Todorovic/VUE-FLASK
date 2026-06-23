@@ -46,18 +46,18 @@ export default {
 
     methods: {
         async dohvati_korisnike() {
-            const data = await axios.get('http://127.0.0.1:5000/korisnici')
+            const data = await axios.get('http://127.0.0.1:5000/users')
             this.korisnici = data.data
         }, 
 
         async dohvati_korisnika_ulogovanog() {
-            const data = await axios.get('http://127.0.0.1:5000/ulogovan_korisnik')
+            const data = await axios.get('http://127.0.0.1:5000/session')
             this.korisnik = data.data
             this.izbaci_ako_nije_admin()
         }, 
 
         async obrisi_korisnika(id) {
-            await axios.delete(`http://127.0.0.1:5000/korisnici/delete/${id}`)
+            await axios.delete(`http://127.0.0.1:5000/users/${id}`)
 			location.reload()
         },
 
