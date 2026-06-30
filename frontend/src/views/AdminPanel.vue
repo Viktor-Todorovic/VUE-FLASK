@@ -84,16 +84,21 @@ export default {
 
 <style scoped>
 .sredina{ 
-    margin-left: 30em;
+    width: 100%;
+    overflow-x: auto;
+    padding: 0 1rem;
 } 
 tr,th,td{
-    border: 1px solid black;
+    border: 0;
     
 }
 
 .slika{
     width: 80px;
     height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.95);
 }
 
 

@@ -123,12 +123,45 @@ export default {
 </script>
 <style>
 .table{
-    margin-left: 50em;
+    padding: 1.5rem;
+}
+
+.table h1,
+.table h4{
+    margin-bottom: 1rem;
+}
+
+.table td button:not(.btn){
+    width: 38px;
+    height: 38px;
+    border: 0;
+    border-radius: 8px;
+    background: rgba(118, 87, 214, 0.12);
+    color: #5f43bd;
+    font-weight: 800;
+}
+
+.table td input{
+    width: 76px;
+    height: 38px;
+    margin: 0 0.45rem;
+    text-align: center;
+}
+
+.total-price{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.total-price span{
+    color: #5f43bd;
+    font-weight: 800;
 }
 
 #kupi_korpa{
     width: 200px;
     margin-top: 2em;
-    margin-left: 8em;
+    margin-left: auto;
+    display: block;
 }
 </style>

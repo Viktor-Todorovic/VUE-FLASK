@@ -82,7 +82,6 @@ export default {
 
             const data = await axios.put(`http://127.0.0.1:5000/admin/users/${this.id}`,this.korisnik)
             this.korisnik = data.data
-            // location.reload()
             this.$toast.success("Uspesno ste izmenili svoj profil!")
             this.$router.push('/ceo-admin-panel')
         },
@@ -105,37 +104,45 @@ export default {
         display: flex;
         align-items: center;
         flex-direction: column;
-        margin-top: 5em;
+        width: min(480px, calc(100% - 2rem));
+        margin: 4em auto 0;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 18px 50px rgba(64, 39, 103, 0.14);
     }
 
     p{
         display: flex;
         flex-direction: column;
-        color: white;
-        font-size: 1.2em;
+        color: #211a2f;
+        width: 100%;
+        font-size: 0.95rem;
+        font-weight: 700;
+        gap: 0.45rem;
     }
 
     input{
-        border-radius: 10px;
-        border: 0;
+        border-radius: 8px;
         padding: 0.5em;
-        height: 40px;
+        min-height: 44px;
         background-color: white;
     }
 
     select{
-        width: 240px;
-        border-radius: 10px;
-        height: 40px;
+        width: 100%;
+        border-radius: 8px;
+        min-height: 44px;
     }
 
     button{
         width: 230px;
-        height: 50px;
+        min-height: 48px;
     }
 
     h1{
-        color: white;
-        font-size: 4em;
+        color: #211a2f;
+        margin-bottom: 1.2rem;
     }
 </style>

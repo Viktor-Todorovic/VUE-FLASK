@@ -1,60 +1,65 @@
 <template>
-    <div class="forma">
-        <img class="slika" :src="korisnik.profilna_slika" alt="">
-        <h1>Moj profil</h1>
-        <p>
-            Username
-            <input type="text" v-model="korisnik.username" >
-        </p>
-        <p>
-            Password
-            <input type="text"v-model="korisnik.password" >
-        </p>
-        <p>
-            Email
-            <input type="text"v-model="korisnik.email" >
-        </p>
-        <p>
-            Godina rodjenja
-            <input type="number"v-model="korisnik.godina_rodjenja" > 
-        </p>
-        <p>
-            Vrsta korisnika
-            <select name="vrsta_korisnika" v-model="korisnik.vrsta_korisnika" >
-                <option value="krojac" >Krojac</option>
-                <option value="kupac">Kupac</option>
-            </select>
-        </p>
-        <p class="file_upload">
-            Dodaj sliku
-            <input type="file" id="dodaj_sliku" @change="handleFileUpload">
-        </p>
+    <div class="profil_gore">
+        <div class="forma">
+            <img class="slika" :src="korisnik.profilna_slika" alt="">
+            <h1>Moj profil</h1>
+            <p>
+                Username
+                <input type="text" v-model="korisnik.username" >
+            </p>
+            <p>
+                Password
+                <input type="text"v-model="korisnik.password" >
+            </p>
+            <p>
+                Email
+                <input type="text"v-model="korisnik.email" >
+            </p>
+            <p>
+                Godina rodjenja
+                <input type="number"v-model="korisnik.godina_rodjenja" > 
+            </p>
+            <p>
+                Vrsta korisnika
+                <select name="vrsta_korisnika" v-model="korisnik.vrsta_korisnika" >
+                    <option value="krojac" >Krojac</option>
+                    <option value="kupac">Kupac</option>
+                </select>
+            </p>
+            <p class="file_upload">
+                Dodaj sliku
+                <input type="file" id="dodaj_sliku" @change="handleFileUpload">
+            </p>
 
-        <p>
-            Dodaj pare
-            <input type="text"v-model="korisnik.trenutno_stanje_novca" >
-        </p>
+            <p>
+                Dodaj pare
+                <input type="text"v-model="korisnik.trenutno_stanje_novca" >
+            </p>
 
-        <button class="btn btn-primary" @click="izmeni">Izmeni</button>
+            <button class="btn btn-primary" @click="izmeni">Izmeni</button>
 
-    </div>
-    <h2>Istorija kupovina</h2>
-    <div class="table">
-            <thead>
-                <tr>
-                    <th>Proizvod</th>
-                    <th>Kolicina</th>
-                    <th>Ukupna cena</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(istorija, index) in istorija_uplata" :key="index">
-                    <td>{{ istorija.naziv_proizvoda }}</td>
-                    <td>{{ istorija.kolicina }}</td>
-                    <td>{{ istorija.ukupna_cena }} din.</td>
-                </tr>
-            </tbody>
         </div>
+
+        <div class="istorija_panel">
+            <h2>Istorija kupovina</h2>
+            <div class="table">
+                <thead>
+                    <tr>
+                        <th>Proizvod</th>
+                        <th>Kolicina</th>
+                        <th>Ukupna cena</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(istorija, index) in istorija_uplata" :key="index">
+                        <td>{{ istorija.naziv_proizvoda }}</td>
+                        <td>{{ istorija.kolicina }}</td>
+                        <td>{{ istorija.ukupna_cena }} din.</td>
+                    </tr>
+                </tbody>
+            </div>
+        </div>
+    </div>
 
     <div class="donja_strana">
 
@@ -153,12 +158,6 @@ export default {
                 this.$toast.error("Duzina usernamea mora biti iznad 3 karaktera!")
                 return
             }
-
-            // const data = await axios.put('http://127.0.0.1:5000/users/me',this.korisnik)
-            // this.korisnik = data.data
-            // location.reload()
-            // this.$toast.success("Uspesno ste izmenili svoj profil!")
-            // this.$router.push('/')
             const formData = new FormData();
             formData.append('id', this.korisnik.id);
             formData.append('username', this.korisnik.username);
@@ -229,7 +228,10 @@ export default {
 .slika{
     width: 130px;
     height: 130px;
-    border-radius: 30px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.95);
+    box-shadow: 0 10px 28px rgba(64, 39, 103, 0.1);
+    object-fit: cover;
 }
 
 #dodaj_sliku{
@@ -239,13 +241,37 @@ export default {
 }
 
 .file_upload{
-    margin-left: 7.2em;
+    margin-left: 0;
 }
 
 h2{
-    margin-left: 26em;
-    margin-top: 2em;
+    width: min(1120px, calc(100% - 2rem));
+    margin: 3rem auto 1rem;
 }
+
+.profil_gore{
+    display: grid;
+    grid-template-columns: minmax(320px, 0.9fr) minmax(360px, 1.1fr);
+    gap: 1.6rem;
+    align-items: start;
+    width: min(1120px, calc(100% - 2rem));
+    margin: 4rem auto 0;
+}
+
+.istorija_panel{
+    min-width: 0;
+}
+
+.istorija_panel h2{
+    width: 100%;
+    margin: 0 0 1rem;
+}
+
+.istorija_panel .table{
+    width: 100% !important;
+    margin: 0 !important;
+}
+
 .donja_strana{
     display: flex;
     flex-direction: column;
@@ -254,50 +280,58 @@ h2{
         display: flex;
         align-items: center;
         flex-direction: column;
-        margin-top: 5em;
+        width: 100%;
+        margin: 0;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 18px 50px rgba(64, 39, 103, 0.14);
     }
 
     p{
         display: flex;
         flex-direction: column;
         color: black;
-        font-size: 1.2em;
+        width: 100%;
+        font-size: 0.95rem;
+        font-weight: 700;
+        gap: 0.45rem;
     }
 
     input{
         border-radius: 10px;
-        border: 1px solid black;
         padding: 0.5em;
-        height: 40px;
+        min-height: 44px;
         background-color: white;
     }
 
     select{
-        width: 240px;
-        border-radius: 10px;
-        height: 40px;
+        width: 100%;
+        border-radius: 8px;
+        min-height: 44px;
     }
 
     button{
         width: 230px;
-        height: 50px;
+        min-height: 48px;
     }
 
     h1{
-        color: black;
-        font-size: 4em;
+        margin: 1rem 0 1.2rem;
     }
     .svi_proizvodi{
-	display: flex;
-    /* flex-direction: column; */
-	gap: 3em;
+	display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.6rem;
+    width: min(1120px, calc(100% - 2rem));
 	justify-content: center;
-    margin-top: 3em;
+    margin: 1rem auto 4rem;
 }
 
 .card{
 	height: 100%;
-    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+    width: 100% !important;
 
 }
 
@@ -313,9 +347,15 @@ h2{
 }
 
 .table{
-    margin-left: 51em;
-    margin-top: 3em;
+    margin: 1rem auto 3rem;
     
+}
+
+@media (max-width: 880px) {
+    .profil_gore{
+        grid-template-columns: 1fr;
+        margin-top: 2rem;
+    }
 }
 
 

@@ -61,15 +61,17 @@ export default {
 p{
     display: flex;
     flex-direction: column;
-    color: black;
-    font-size: 2em;
-    border: 1px solid black;
-    width: 40%;
+    color: #211a2f;
+    font-size: 1.35rem;
+    font-weight: 800;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    width: 100%;
     justify-content: center;
     align-items: center;
     padding: 1em;
-    background-color: #a0d2eb;
-    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 18px 50px rgba(64, 39, 103, 0.14);
 
 }
 
@@ -79,11 +81,11 @@ p button{
 }
 
 .glavna{
-    display: flex;
-    gap: 2em;
-    flex-direction: column;
-    margin-left: 40em;
-    margin-top: 3em;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    width: min(920px, calc(100% - 2rem));
+    margin: 3em auto 0;
 }
     
 </style>

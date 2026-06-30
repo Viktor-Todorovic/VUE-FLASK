@@ -97,12 +97,11 @@ export default {
 
 <style scoped>
 .svi_proizvodi{
-	display: flex;
-	gap: 5em 5em;
-	justify-content: center;
-	flex-wrap: wrap;
-	width: 60%;
-	margin: 0 auto;
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.6rem;
+	width: min(1120px, calc(100% - 2rem));
+	margin: 0 auto 4rem;
 }
 
 .slika_profilna{
@@ -113,12 +112,14 @@ export default {
 
 .card{
 	height: 100%;
-	/* box-shadow: 4px 10px; */
-	box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+	width: 100% !important;
 }
 
 .card-objava{
 	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.85rem 1rem 0.4rem;
 }
 
 .dugimici{
@@ -133,9 +134,8 @@ export default {
 }
 
 h1{
-	margin-left: 21em;
-	margin-bottom: 1em;
-	margin-top: 0.5em;
+	width: min(1120px, calc(100% - 2rem));
+	margin: 2.3rem auto 1.4rem;
 }
 
 </style>

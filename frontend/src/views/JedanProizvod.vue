@@ -2,59 +2,8 @@
 
     <div class="forma_izmena_proizvoda">
         <h1>Jedan proizvod</h1>
-        <!-- <img class="slika" :src="proizvod.proizvod_slika" alt=""> -->
         <div class="p_tagovi">
-
-            <!-- <p>
-                Naziv proizvoda: {{ proizvod.naziv_proizvoda }}
-                <input type="text" v-model="proizvod.naziv_proizvoda" disabled>
-            </p>
-            <p class="opis">
-                Opis
-                <textarea name="" id="" v-model="proizvod.opis" disabled></textarea>
-            </p>
-            <p>
-                Materijal
-                <input type="text"v-model="proizvod.materijal" disabled>
-            </p>
-            <p>
-                Mere
-                <input type="number"v-model="proizvod.mere" disabled> 
-            </p>
-            <p>
-                Cena 
-                <input type="number" v-model="proizvod.cena" disabled>
-            </p>
-            <p>
-                Trenutna kolicina: {{ proizvod.kolicina }} 
-                <input type="number" v-model="nova_kolicina">
-                <button @click="dodaj_kolicinu" class="btn btn-primary"v-if="proizvod.korisnik_id == korisnik.id" >Dodaj kolicinu</button>
-            </p> -->
-
-            
-            <!-- <p>
-                <b>Naziv proizvoda:</b>{{ proizvod.naziv_proizvoda }}
-            </p>
-            <p>
-                <b>Opis:</b> {{ proizvod.opis }}
-            </p>
-            <p>
-                <b>Materijal:</b> {{ proizvod.materijal }}
-            </p>
-            <p>
-                <b>Mere:</b> {{ proizvod.mere }}
-            </p>
-            <p>
-                <b>Cena:</b> {{ proizvod.cena }}
-            </p>
-            <p>
-                <b>Trenutna kolicina:</b> {{ proizvod.kolicina }} 
-                <input type="number" v-model="nova_kolicina">
-                <button @click="dodaj_kolicinu" class="btn btn-primary"v-if="proizvod.korisnik_id == korisnik.id" >Dodaj kolicinu</button>
-            </p> -->
-
             <div class="card" style="width: 18rem;">
-                <!-- <p><b>Objavio:</b>{{ proizvod.korisnik_id }}</p> -->
                 <img class="slika" :src="proizvod.proizvod_slika" alt="">
             <div class="card-body">
                 <p class="card-text"><b>Naziv proizvoda:</b>{{ proizvod.naziv_proizvoda }}</p>
@@ -164,20 +113,19 @@ export default {
 </script>
 <style scoped>
 .card{
-    /* width: 500px; */
-    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+    width: min(440px, calc(100vw - 2rem)) !important;
 
 }
 
 
 .ostavljeni_komentari{
-    background-color: aliceblue;
-    width: 57%;
-    margin-left: 23em;
-    margin-top: 3em;
+    background-color: rgba(255, 255, 255, 0.86);
+    width: min(800px, calc(100% - 2rem));
+    margin: 1rem auto;
     padding: 1em;
-    border-radius: 15px;
-    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, rgba(240, 46, 170, 0.3) 10px 10px, rgba(240, 46, 170, 0.2) 15px 15px, rgba(240, 46, 170, 0.1) 20px 20px, rgba(240, 46, 170, 0.05) 25px 25px;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    border-radius: 8px;
+    box-shadow: 0 10px 28px rgba(64, 39, 103, 0.1);
 
 }
 .ostavljeni_komentari p{
@@ -188,16 +136,23 @@ export default {
     display: flex;
     flex-direction: column;
     margin-top: 2em;
+    align-items: center;
 }
 
 .polje_za_komentare{
-    margin-left: 23em;
+    width: min(800px, calc(100% - 2rem));
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: 0 10px 28px rgba(64, 39, 103, 0.1);
     display: flex;
     flex-direction: column;
 }
 .polje_za_komentare textarea{
-    width: 70%;
-    border-radius: 0;
+    width: 100%;
+    min-height: 130px;
 }
 
 
@@ -207,29 +162,29 @@ export default {
         align-items: center;
         flex-direction: column;
         margin: 0 auto;
-        margin-top: 5em;
-        width: 80%;
-        border-radius: 10px;
+        margin-top: 4em;
+        width: min(800px, calc(100% - 2rem));
+        border-radius: 8px;
     }
 
     p{
         display: flex;
         flex-direction: row;
         color: black;
-        font-size: 1.2em;
+        font-size: 1rem;
+        gap: 0.25rem;
+        flex-wrap: wrap;
     }
     b{
         margin-right: 0.5em;
     }
 
     input{
-        border-radius: 10px;
-        border: 0;
         padding: 0.5em;
-        height: 30px;
+        min-height: 40px;
         background-color: white;
-        border: 1px solid black;
         color: black;
+        margin-top: 0.5rem;
     }
 
     select{
@@ -240,13 +195,11 @@ export default {
 
     button{
         width: 230px;
-        height: 50px;
+        min-height: 48px;
     }
 
     h1{
-        color: black;
-        font-size: 4em;
-        box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+        margin-bottom: 0;
     }
 
     .opis{
@@ -258,9 +211,8 @@ export default {
 
     textarea{
         height: 100%;
-        border-radius: 10px;
+        border-radius: 8px;
         padding: 0.2em;
-        border: 1px solid black;
         background-color: white;
         color: black;
     }

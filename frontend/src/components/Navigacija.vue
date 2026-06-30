@@ -23,9 +23,11 @@
         </li>
         
       </ul>
-      <button class="btn btn-danger" v-if="korisnik" @click="logout">Logout</button>
-      <RouterLink class="btn btn-primary moj_profil" v-if="korisnik" to="/profil">Moj profil</RouterLink>
-      <RouterLink class="btn btn-success ms-4" v-if="korisnik" to="/korpa">Korpa</RouterLink>
+      <div class="nav-akcije">
+        <button class="btn btn-danger" v-if="korisnik" @click="logout">Logout</button>
+        <RouterLink class="btn btn-primary moj_profil" v-if="korisnik" to="/profil">Moj profil</RouterLink>
+        <RouterLink class="btn btn-success" v-if="korisnik" to="/korpa">Korpa</RouterLink>
+      </div>
     </div>
   </div>
 </nav>
@@ -68,7 +70,22 @@ export default {
 }
 </script>
 <style scoped>
+.nav-akcije{
+  display: flex;
+  gap: 0.6rem;
+  margin-left: auto;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 .moj_profil{
-  margin-left: 63%;
+  margin-left: 0;
+}
+
+@media (max-width: 991px) {
+  .nav-akcije{
+    margin-left: 0;
+    margin-top: 0.75rem;
+  }
 }
 </style>

@@ -78,19 +78,26 @@ export default {
 </script>
 <style scoped>
     .svi_proizvodi{
-	display: flex;
-	gap: 1em;
-	justify-content: center;
-	flex-wrap: wrap;
+	display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 1.6rem;
+	width: min(1120px, calc(100% - 2rem));
+	margin: 0 auto 4rem;
 }
 
 .card{
 	height: 100%;
+    width: 100% !important;
 }
 
 .dugimici{
 	display: flex;
 	flex-direction: column;
 	gap: 0.5em;
+}
+
+h1{
+    width: min(1120px, calc(100% - 2rem));
+    margin: 2.3rem auto 1.4rem;
 }
 </style>

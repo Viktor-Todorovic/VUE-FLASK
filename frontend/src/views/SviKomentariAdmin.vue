@@ -59,6 +59,6 @@ export default {
 </script>
 <style scoped>
 .table{
-    margin-left: 48em;
+    padding: 1.5rem;
 }
 </style>

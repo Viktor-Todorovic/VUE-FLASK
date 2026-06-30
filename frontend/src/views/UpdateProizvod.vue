@@ -152,59 +152,68 @@ export default {
 
 <style scoped>
 .slika{
-    width: 430px;
+    width: 100%;
+    max-width: 430px;
     height: 300px;
-    border-radius: 15px;
+    border-radius: 8px;
     margin-bottom: 1em;
-    border: 1px solid black;
+    border: 1px solid rgba(83, 61, 112, 0.14);
+    box-shadow: 0 10px 28px rgba(64, 39, 103, 0.1);
 }
 
 .forma_izmena_proizvoda{
         display: flex;
         align-items: center;
         flex-direction: column;
-        margin-top: 5em;
+        width: min(540px, calc(100% - 2rem));
+        margin: 4em auto 0;
+        padding: 2rem;
+        border: 1px solid rgba(255, 255, 255, 0.82);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.86);
+        box-shadow: 0 18px 50px rgba(64, 39, 103, 0.14);
     }
 
     p{
         display: flex;
         flex-direction: column;
         color: black;
-        font-size: 1.2em;
+        width: 100%;
+        font-size: 0.95rem;
+        font-weight: 700;
+        gap: 0.45rem;
     }
 
     input{
         border-radius: 10px;
-        border: 1px solid black;
         padding: 0.5em;
-        height: 40px;
+        min-height: 44px;
         background-color: white;
     }
 
     select{
-        width: 240px;
-        border-radius: 10px;
-        height: 40px;
+        width: 100%;
+        border-radius: 8px;
+        min-height: 44px;
     }
 
     button{
         width: 230px;
-        height: 50px;
+        min-height: 48px;
     }
 
     h1{
-        color: black;
-        font-size: 4em;
+        margin-bottom: 1.2rem;
     }
 
     .opis{
-        width: 239px;
-        height: 200px;
+        width: 100%;
+        height: 180px;
     }
 
     textarea{
         height: 100%;
-        border-radius: 10px;
+        border-radius: 8px;
         padding: 0.2em;
     }
 
